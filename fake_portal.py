@@ -69,11 +69,12 @@ $('query').onclick=async()=>{ $('status').textContent='Loading';$('rows').replac
             except (KeyError,ValueError):return self.send(400,'year required')
             with self.server.lock:
                 self.server.download_attempts+=1;attempt=self.server.download_attempts
+            print(f"DOWNLOAD attempt={attempt} path={self.path} dest={self.headers.get('Sec-Fetch-Dest')} mode={self.headers.get('Sec-Fetch-Mode')}",flush=True)
             if self.server.scenario=='download-once' and attempt==1:return self.send(503,'synthetic failure')
             amount='777.00' if self.server.scenario=='wrong-amount' else '1000.00'
             order='WRONG-ORDER' if self.server.scenario=='wrong-order' else 'ORDER-DEMO-001'
             data=pdf_bytes(order,year,amount)
-            return self.send(200,data,'application/pdf',{'Content-Disposition':'attachment; filename=notice.pdf'})
+            return self.send(200,data,'application/pdf')
         self.send(404,'not found')
     def do_POST(self):
         length=int(self.headers.get('Content-Length','0'))
