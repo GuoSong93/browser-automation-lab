@@ -21,7 +21,7 @@ class AutomationTests(unittest.TestCase):
   for scenario in ('success','delayed','download-once'):
    with self.subTest(scenario=scenario),TemporaryDirectory() as tmp:
     result=run_demo(scenario,Path(tmp));self.assertTrue(result['verified'])
-    self.assertEqual(2 if scenario=='download-once' else 1,result['downloadAttempts'])
+    self.assertEqual(2 if scenario=='download-once' else 1,result['downloadAttempts'], result)
  @unittest.skipIf(os.environ.get("SKIP_BROWSER_E2E")=="1","browser end-to-end explicitly disabled")
  def test_browser_refuses_empty_stale_wrong_amount_and_wrong_order(self):
   for scenario in ('empty','stale-only','wrong-amount','wrong-order'):
